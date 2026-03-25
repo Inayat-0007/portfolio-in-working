@@ -9,7 +9,7 @@
 </p>
 
 ### *A hyper-optimized, interactive digital resume built for performance & aesthetics.* 
-[🌐 View the Live Experience](https://inayat.me) <!-- Replace with your actual deployed URL -->
+[🌐 View the Live Experience](https://portfolio-inayat-hussain-2026-ai-ml.vercel.app/)
 
 </div>
 
