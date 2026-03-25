@@ -219,13 +219,13 @@ export default function Hero() {
 
         {/* Sub-tagline */}
         <motion.div
-          className="flex items-center gap-2 mb-12 glass-card px-6 py-2"
+          className="flex items-center gap-2 mb-12 glass-card px-6 py-2 bg-bg-primary/40 backdrop-blur-xl border border-border-glass shadow-lg"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 1.2, duration: 0.8 }}
         >
           <div className="w-2 h-2 rounded-full bg-accent-success shadow-[0_0_10px_rgba(16,185,129,0.8)] animate-pulse" />
-          <p className="font-mono text-sm md:text-base text-text-primary tracking-wide">
+          <p className="font-mono text-sm md:text-base text-text-primary font-semibold tracking-wide drop-shadow-md">
             {PERSONAL.subTagline}
           </p>
         </motion.div>
@@ -249,7 +249,7 @@ export default function Hero() {
           <MagneticButton>
             <a
               href="#contact"
-              className="px-8 py-4 glass-card text-text-primary font-display font-bold text-sm uppercase tracking-widest rounded-full hover:border-accent-secondary hover:shadow-[0_0_40px_rgba(176,38,255,0.3)] hover:bg-white/5 transition-all duration-300"
+              className="px-8 py-4 glass-card bg-bg-primary/40 backdrop-blur-xl text-text-primary font-display font-bold text-sm uppercase tracking-widest rounded-full hover:border-accent-secondary hover:shadow-[0_0_40px_rgba(176,38,255,0.3)] hover:bg-bg-secondary/60 transition-all duration-300 drop-shadow-md"
               data-cursor="button"
             >
               Let&apos;s Connect

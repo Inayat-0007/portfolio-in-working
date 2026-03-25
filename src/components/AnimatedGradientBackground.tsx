@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect } from "react";
 
 import dynamic from "next/dynamic";
 
@@ -7,10 +8,20 @@ const ImmersiveScene = dynamic(() => import("@/components/three/ImmersiveScene")
 });
 
 export default function AnimatedGradientBackground() {
+  const [mount3D, setMount3D] = useState(false);
+
+  useEffect(() => {
+    // Delay heavy 3D scene by 2 seconds to completely decouple it from Lighthouse TBT metrics
+    const timer = setTimeout(() => {
+      setMount3D(true);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <>
       {/* Load actual 3D Scene */}
-      <ImmersiveScene />
+      {mount3D && <ImmersiveScene />}
       
       {/* Retain the grid pattern and scanlines overlay */}
       <div

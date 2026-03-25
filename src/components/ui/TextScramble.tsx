@@ -33,14 +33,17 @@ export default function TextScramble({
           .join("")
       );
 
-      iteration += 1 / 3;
+      iteration += 1;
       if (iteration > maxIterations) {
         clearInterval(interval);
         setDisplayText(text);
       }
-    }, speed);
+    }, speed * 2);
 
-    return () => clearInterval(interval);
+    return () => {
+        clearInterval(interval);
+        setDisplayText(text); // Ensures text is flawless if unmounted early
+    };
   }, [text, speed]);
 
   useEffect(() => {

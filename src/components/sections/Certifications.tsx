@@ -213,9 +213,9 @@ export default function Certifications() {
                               <span className="text-3xl drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">{cert.badge}</span>
                           </div>
                           <div>
-                              <h4 className="font-display font-extrabold text-2xl md:text-3xl text-text-primary group-hover:text-accent-primary transition-colors leading-tight">
+                              <h3 className="font-display font-extrabold text-2xl md:text-3xl text-text-primary group-hover:text-accent-primary transition-colors leading-tight">
                                 {cert.title}
-                              </h4>
+                              </h3>
                               <div className="font-mono text-sm text-text-muted mt-2 flex items-center gap-2 font-semibold">
                                   <Building2 size={14} className="text-accent-primary/60" /> {cert.issuer}
                               </div>
@@ -251,7 +251,7 @@ export default function Certifications() {
 
                     {/* Skills Drawer */}
                     <div className="relative z-10 pt-8 border-t border-white/5 mt-auto">
-                        <h5 className="font-mono text-[11px] text-text-dim uppercase tracking-[0.3em] font-bold mb-4">Core Competencies</h5>
+                        <h4 className="font-mono text-[11px] text-text-dim uppercase tracking-[0.3em] font-bold mb-4">Core Competencies</h4>
                         <div className="flex flex-wrap gap-3">
                         {cert.skills.map((skill) => (
                           <span

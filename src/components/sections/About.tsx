@@ -153,9 +153,9 @@ export default function About() {
                      <IconComponent size={24} className="text-accent-primary drop-shadow-[0_0_8px_rgba(0,229,255,0.8)]" />
                    </div>
                    <div>
-                     <h3 className="font-display font-bold text-xl text-text-primary mb-3 tracking-wide group-hover:text-accent-primary transition-colors">
+                     <h2 className="font-display font-bold text-xl text-text-primary mb-3 tracking-wide group-hover:text-accent-primary transition-colors">
                        {block.label}
-                     </h3>
+                     </h2>
                      <p className="font-mono text-sm text-text-muted leading-relaxed font-light">
                        {block.detail}
                      </p>
