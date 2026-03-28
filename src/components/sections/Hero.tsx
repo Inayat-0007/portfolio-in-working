@@ -1,274 +1,188 @@
 "use client";
-import { useEffect, useRef, useState, useCallback } from "react";
-import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
-import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { PERSONAL } from "@/lib/constants";
 import MagneticButton from "@/components/ui/MagneticButton";
+import TextScramble from "@/components/ui/TextScramble";
 import ScrollIndicator from "@/components/ui/ScrollIndicator";
-import TechTicker from "@/components/ui/TechTicker";
-import FloatingElement from "@/components/ui/FloatingElement";
-import dynamic from "next/dynamic";
-
-const HeroParticles = dynamic(() => import("@/components/three/HeroParticles"), {
-  ssr: false,
-  loading: () => <div className="absolute inset-0 bg-bg-primary" />,
-});
+import FrameCanvas from "@/components/ui/FrameCanvas";
+import { useFrameSequence } from "@/hooks/useFrameSequence";
+import Image from "next/image";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const nameRef = useRef<HTMLHeadingElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  // ── Scroll-Swap State Machine ──
-  // false = styled image showing (initial state)
-  // true  = original image showing (after user scrolled past hero and came back)
-  const [showOriginal, setShowOriginal] = useState(false);
-  const hasScrolledPastRef = useRef(false);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-
-  // ── Precision Scroll Tracking for Image Swap ──
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    // User has scrolled 100% past hero section
-    if (latest >= 0.98 && !hasScrolledPastRef.current) {
-      hasScrolledPastRef.current = true;
-    }
-
-    // User is scrolling back into the hero section after having left it
-    if (hasScrolledPastRef.current && latest < 0.5 && !showOriginal) {
-      setShowOriginal(true);
-    }
-  });
-
-  const nameScale = useTransform(scrollYProgress, [0, 1], [1, 1.5]);
-  const nameOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
-  const nameY = useTransform(scrollYProgress, [0, 1], [0, -60]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
-  const bgY = useTransform(scrollYProgress, [0, 1], [0, 150]);
-
-  // Image parallax for depth
-  const imgScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
-  const imgY = useTransform(scrollYProgress, [0, 1], [0, 80]);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  
+  // 210 frames dynamically loaded
+  const { images, progress, isLoaded } = useFrameSequence(210, "/images/hero section images frame/ezgif-frame-");
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const chars = nameRef.current?.querySelectorAll(".char");
-      if (chars) {
-        gsap.from(chars, {
-          y: 80,
-          opacity: 0,
-          rotateX: 40,
-          stagger: 0.03,
-          duration: 0.8,
-          ease: "power3.out",
-          delay: 0.4,
-        });
-      }
-    }, sectionRef);
-
-    return () => ctx.revert();
+    // Detect mobile / touch screens to apply fallback early on
+    setIsTouchDevice(
+      "ontouchstart" in window || navigator.maxTouchPoints > 0
+    );
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative h-screen flex items-center justify-center overflow-hidden aurora-bg"
-      id="hero"
-    >
-      {/* Background Layers */}
-      <motion.div className="absolute inset-0" style={{ y: bgY }}>
-        <HeroParticles />
-      </motion.div>
+    <>
+      {/* 
+        ═══════════════════════════════════════════════════
+        MASTER PRELOADER (INITIATE SEQUENCE)
+        ═══════════════════════════════════════════════════
+      */}
+      <AnimatePresence>
+        {!isLoaded && !isTouchDevice && (
+          <motion.div
+            className="fixed inset-0 z-[1000] flex flex-col items-center justify-center bg-[#050505] text-white"
+            exit={{ opacity: 0, scale: 1.05 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+          >
+            <div className="flex flex-col items-center gap-6 w-full max-w-sm px-6">
+              <span className="font-mono text-xs uppercase tracking-[0.3em] text-accent-primary animate-pulse">
+                Initiating Master Build
+              </span>
+              
+              <h2 className="font-display text-4xl font-bold tracking-widest drop-shadow-[0_0_15px_rgba(0,229,255,0.4)]">
+                {progress}%
+              </h2>
 
-      {/* ═══════════════════════════════════════════════════
-          HERO PORTRAIT - Scroll-Reactive Image Swap Engine
-          ═══════════════════════════════════════════════════ */}
-      <motion.div
-        className="absolute right-0 lg:right-[1%] bottom-0 w-[28%] lg:w-[25%] h-[75%] z-[2] pointer-events-none select-none hidden md:block"
-        style={{ scale: imgScale, y: imgY }}
-        initial={{ opacity: 0, x: 100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1.4, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      >
-        {/* Styled Image Layer */}
-        <motion.div
-          className="absolute inset-0"
-          animate={{ opacity: showOriginal ? 0 : 1 }}
-          transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
-        >
-          <Image
-            src="/images/hero-styled.jpg"
-            alt="Inayat - Styled Portrait"
-            fill
-            className="object-contain object-bottom"
-            priority
-            quality={95}
-            sizes="(max-width: 1024px) 100vw, 50vw"
-          />
-        </motion.div>
+              <div className="w-full h-[2px] bg-white/10 relative overflow-hidden mt-2">
+                <motion.div
+                  className="absolute top-0 left-0 h-full bg-accent-primary shadow-[0_0_10px_rgba(0,229,255,0.8)]"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${progress}%` }}
+                />
+              </div>
+              
+              <span className="font-mono text-[10px] uppercase text-text-dim">
+                Mounting Render Pipeline...
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        {/* Original Image Layer */}
-        <motion.div
-          className="absolute inset-0"
-          animate={{ opacity: showOriginal ? 1 : 0 }}
-          transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
-        >
-          <Image
-            src="/images/hero-original.jpg"
-            alt="Inayat - Original Portrait"
-            fill
-            className="object-contain object-bottom"
-            priority
-            quality={95}
-            sizes="(max-width: 1024px) 100vw, 50vw"
-          />
-        </motion.div>
-
-        {/* Bottom gradient fade so image melts into the section */}
-        <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-[#030303] via-[#030303]/60 to-transparent pointer-events-none" />
+      {/* 
+        ═══════════════════════════════════════════════════
+        HERO SECTION WRAPPER (height set heavily for scrolling)
+        ═══════════════════════════════════════════════════
+      */}
+      <section id="hero" className="relative">
         
-        {/* Subtle neon glow ring behind portrait */}
-        <div className="absolute inset-0 -z-10 blur-3xl opacity-30" 
-          style={{
-            background: showOriginal 
-              ? "radial-gradient(ellipse at 50% 60%, rgba(255,255,255,0.1) 0%, transparent 70%)"
-              : "radial-gradient(ellipse at 50% 60%, rgba(0,229,255,0.15) 0%, rgba(176,38,255,0.1) 50%, transparent 70%)"
-          }}
-        />
-      </motion.div>
+        {/*
+          THE CANVAS TIMELINE:
+          If touch, show fallback image immediately. If desktop, render sequence context.
+        */}
+        <div className="h-[250vh]">
+          {isTouchDevice ? (
+            // Mobile Fallback: Parallax Static Image
+            <div className="sticky top-16 md:top-20 h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] w-full overflow-hidden flex items-center justify-center">
+              <Image 
+                src="/images/hero section images frame/ezgif-frame-210.jpg"
+                alt="Inayat Hero"
+                fill
+                className="object-cover opacity-60"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-[#050505]/80" />
+            </div>
+          ) : (
+            // Desktop 60fps WebGL/Canvas Scroll Engine
+            isLoaded && <FrameCanvas images={images} />
+          )}
 
-      {/* Floating Geometric Elements */}
-      <FloatingElement
-        className="absolute top-[15%] left-[10%] opacity-[0.4] hidden md:block mix-blend-screen"
-        delay={0}
-        duration={8}
-      >
-        <svg width="80" height="80" viewBox="0 0 60 60" fill="none">
-          <polygon
-            points="30,2 58,17 58,43 30,58 2,43 2,17"
-            stroke="var(--accent-primary)"
-            strokeWidth="1.5"
-            style={{ filter: "drop-shadow(0 0 10px rgba(0, 229, 255, 0.5))" }}
-          />
-        </svg>
-      </FloatingElement>
+          {/* 
+            ═══════════════════════════════════════════════════
+            CONTENT OVERLAY
+            ═══════════════════════════════════════════════════
+          */}
+          <div className="absolute top-16 md:top-20 left-0 w-full h-[calc(100dvh-4rem)] md:h-[calc(100dvh-5rem)] flex flex-col justify-end pb-[12vh] px-6 md:px-12 z-10 pointer-events-none">
+            <div className="w-full flex flex-col items-start max-w-4xl pointer-events-auto">
+              
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={isLoaded || isTouchDevice ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                className="inline-flex items-center gap-4 mb-8"
+              >
+                <div className="w-2 h-2 rounded-full bg-accent-primary shadow-[0_0_10px_rgba(0,229,255,0.8)] animate-pulse" />
+                <span className="font-mono text-xs uppercase tracking-[0.2em] text-accent-primary">
+                  System Online
+                </span>
+              </motion.div>
 
-      <FloatingElement
-        className="absolute top-[25%] right-[12%] opacity-[0.5] hidden md:block mix-blend-screen"
-        delay={2}
-        duration={7}
-      >
-        <span className="font-mono text-5xl text-accent-secondary" style={{ filter: "drop-shadow(0 0 10px rgba(176, 38, 255, 0.5))" }}>&lt;/&gt;</span>
-      </FloatingElement>
+              <motion.h1
+                className="sr-only"
+                style={{ fontSize: "clamp(3rem, 7vw, 6.5rem)" }}
+                initial={{ opacity: 0 }}
+                animate={isLoaded || isTouchDevice ? { opacity: 1 } : {}}
+              >
+                {(isLoaded || isTouchDevice) && (
+                  <TextScramble text="INAYAT HUSSAIN" speed={40} play={true} />
+                )}
+              </motion.h1>
 
-      <FloatingElement
-        className="absolute bottom-[30%] left-[8%] opacity-[0.6] hidden md:block mix-blend-screen"
-        delay={1}
-        duration={9}
-        y={15}
-      >
-        <div className="w-4 h-4 rounded-full bg-accent-primary shadow-[0_0_20px_rgba(0,229,255,1)]" />
-      </FloatingElement>
+              <motion.p
+                className="font-body font-medium text-text-primary mb-8 text-shadow-sm opacity-90 tracking-wide"
+                style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.6rem)" }}
+                initial={{ opacity: 0, x: -20 }}
+                animate={isLoaded || isTouchDevice ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.8, delay: 0.8 }}
+              >
+                Software Engineer | Full Stack & GenAI Specialist
+              </motion.p>
 
-      <FloatingElement
-        className="absolute bottom-[20%] right-[15%] opacity-[0.6] hidden md:block mix-blend-screen"
-        delay={3}
-        duration={6}
-      >
-        <div className="w-3 h-3 rounded-full bg-accent-secondary shadow-[0_0_20px_rgba(176,38,255,1)]" />
-      </FloatingElement>
+              <motion.div
+                className="glass-card mb-16 px-6 py-4 border-l-2 text-text-muted bg-[#050505]/40 backdrop-blur-md"
+                style={{ borderLeftColor: "var(--accent-secondary)" }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={isLoaded || isTouchDevice ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.8, delay: 1 }}
+              >
+                <p className="font-mono text-xs md:text-sm tracking-widest text-[#B0B0B0]">
+                  Building Scalable Web Solutions & Intelligent AI Systems
+                </p>
+              </motion.div>
 
-      {/* Main Content */}
-      <motion.div
-        ref={contentRef}
-        className="relative z-10 text-center md:text-left px-6 md:px-12 w-full flex flex-col items-center md:items-start md:w-[52%] md:max-w-[52%] lg:w-[48%] lg:max-w-[48%] md:ml-[2%] lg:ml-[5%]"
-        style={{ opacity: contentOpacity }}
-      >
-        {/* Name */}
-        <motion.h1
-          ref={nameRef}
-          className="font-display font-extrabold leading-[0.9] tracking-tighter mb-4 text-gradient-primary text-glow drop-shadow-2xl"
-          style={{
-            fontSize: "clamp(2.2rem, 5vw, 4.5rem)",
-            scale: nameScale,
-            opacity: nameOpacity,
-            y: nameY,
-            WebkitTextStroke: "1px rgba(255, 255, 255, 0.05)",
-          }}
-        >
-          {PERSONAL.displayName}
-        </motion.h1>
+              {/* CTAs */}
+              <motion.div
+                className="flex flex-col sm:flex-row items-center gap-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={isLoaded || isTouchDevice ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.8, delay: 1.2 }}
+              >
+                <MagneticButton>
+                  <a
+                    href="#projects"
+                    className="inline-flex items-center justify-center px-8 py-4 neon-border bg-[#101010] text-accent-primary font-display font-bold text-xs uppercase tracking-widest rounded-full hover:bg-accent-primary hover:text-[#050505] hover:shadow-[0_0_30px_rgba(0,229,255,0.4)] transition-all duration-300 pointer-events-auto"
+                    data-cursor="button"
+                  >
+                    Enter Neural Net
+                  </a>
+                </MagneticButton>
+                
+                <MagneticButton>
+                  <a
+                    href="#contact"
+                    className="inline-flex items-center justify-center px-8 py-4 bg-transparent border border-white/10 text-text-primary font-display font-bold text-xs uppercase tracking-widest rounded-full hover:border-accent-secondary hover:shadow-[0_0_20px_rgba(176,38,255,0.2)] hover:bg-[#1a1a1a] transition-all duration-300 pointer-events-auto"
+                    data-cursor="button"
+                  >
+                    Initiate Contact
+                  </a>
+                </MagneticButton>
+              </motion.div>
 
-        {/* Tagline */}
-        <motion.p
-          className="font-body font-light text-text-primary mb-3 max-w-2xl text-shadow-sm"
-          style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.8rem)" }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        >
-          {PERSONAL.tagline}
-        </motion.p>
+            </div>
+          </div>
+        </div>
 
-        {/* Sub-tagline */}
-        <motion.div
-          className="flex items-center gap-2 mb-12 glass-card px-6 py-2 bg-bg-primary/40 backdrop-blur-xl border border-border-glass shadow-lg"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1.2, duration: 0.8 }}
-        >
-          <div className="w-2 h-2 rounded-full bg-accent-success shadow-[0_0_10px_rgba(16,185,129,0.8)] animate-pulse" />
-          <p className="font-mono text-sm md:text-base text-text-primary font-semibold tracking-wide drop-shadow-md">
-            {PERSONAL.subTagline}
-          </p>
-        </motion.div>
-
-        {/* CTAs */}
-        <motion.div
-          className="flex flex-col sm:flex-row items-center justify-center gap-6"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <MagneticButton>
-            <a
-              href="#projects"
-              className="px-8 py-4 bg-accent-primary text-bg-primary font-display font-bold text-sm uppercase tracking-widest rounded-full hover:shadow-[0_0_40px_rgba(0,229,255,0.6)] transition-all duration-300"
-              data-cursor="button"
-            >
-              Explore Projects
-            </a>
-          </MagneticButton>
-          <MagneticButton>
-            <a
-              href="#contact"
-              className="px-8 py-4 glass-card bg-bg-primary/40 backdrop-blur-xl text-text-primary font-display font-bold text-sm uppercase tracking-widest rounded-full hover:border-accent-secondary hover:shadow-[0_0_40px_rgba(176,38,255,0.3)] hover:bg-bg-secondary/60 transition-all duration-300 drop-shadow-md"
-              data-cursor="button"
-            >
-              Let&apos;s Connect
-            </a>
-          </MagneticButton>
-        </motion.div>
-
-        {/* Tech Ticker */}
-        <motion.div
-          className="mt-20 w-screen max-w-full overflow-hidden"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.6, duration: 1 }}
-        >
-          <TechTicker />
-        </motion.div>
-      </motion.div>
-
-      <ScrollIndicator />
-    </section>
+        {/* Global Scroll Indicator */}
+        <div className="absolute bottom-[5vh] left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+          <ScrollIndicator />
+        </div>
+      </section>
+    </>
   );
 }

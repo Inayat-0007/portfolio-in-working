@@ -1,0 +1,150 @@
+================================================================================
+          PROJECT: INAYAT 2026 PORTFOLIO - "THE MASTER BUILD"
+================================================================================
+DOCUMENT TYPE: Master Architecture, PRD (Product Requirements Document), 
+               MRD (Market Requirements Document), and Technical Deep Dive
+AUTHOR:        Mohammad Inayat Hussain (Lead) & Principal AI Engineer
+DATE:          March 2026
+================================================================================
+
+--------------------------------------------------------------------------------
+1. EXECUTIVE SUMMARY & VISION (MRD)
+--------------------------------------------------------------------------------
+The "INAYAT 2026 PORTFOLIO" is designed to transcend traditional resumes. In the
+current high-end engineering market, a portfolio must not only list skills but
+viscerally demonstrate mastery over user experience (UX), micro-interactions,
+advanced styling, and modern React architectures.
+
+- Goal: Create a "Wow-Factor" first impression.
+- Aesthetic: "2026 Master Build" – High-tech, premium, clean cyberpunk, neon-minimalism.
+- Target Audience: Elite tech recruiters, AI startup founders, and high-level 
+  engineering directors looking for 10x developer capabilities.
+
+--------------------------------------------------------------------------------
+2. TECHNOLOGY STACK ARCHITECTURE
+--------------------------------------------------------------------------------
+This project utilizes a bleeding-edge, highly optimized stack tailored for 
+visual fidelity and performance:
+
+[Core Framework]
+- Next.js 16.1.6: Server-side rendering, highly optimized image delivery, and 
+  app-router based routing. 
+  *Note: Switched to --webpack compiler due to Turbopack CSS parsing bugs with
+  bleeding-edge Tailwind CSS v4 directives.*
+- React 19.x: Using concurrent features, hooks, and advanced component hydration.
+
+[Styling & CSS Engine]
+- Tailwind CSS v4: Heavily customized utility classes mapped to custom CSS variables.
+- Vanilla CSS (`globals.css`): Houses the complex keyframe animations (`aurora`, 
+  `mesh-flow`, `pulse-glow`), multi-layered glassmorphism (`.glass-card`), and 
+  glowing psuedo-elements (`.neon-border`).
+
+[Animation & Kinetic Interactivity]
+- Framer Motion: Powers component mounting, spring-level physics for floating 
+  chips, and layout transitions.
+- GSAP + ScrollTrigger: Drives the complex timeline-based scrolling behaviors 
+  (e.g., the horizontal project scroll lock and vertical timeline draw).
+- Vanilla-Tilt: Powers organic 3D tilt interactions on cards.
+
+[Graphics & 3D]
+- Three.js / @react-three/fiber: For hyper-optimized, background canvas 
+  rendering (e.g., floating geometric hero particles).
+
+--------------------------------------------------------------------------------
+3. GLOBAL DESIGN SYSTEM & TECHNIQUES
+--------------------------------------------------------------------------------
+To achieve the "premium" feel, we aggressively stripped away flat design and 
+injected dynamic depth:
+
+- Aurora Backgrounds (`aurora-bg`): Instead of static gradients, we use slow-
+  animating, blurred circular meshes that rotate and shift scale, reacting to 
+  the layout.
+- Glassmorphism Advanced: `.glass-card` uses `backdrop-filter: blur(16px)`, 
+  a 1px semi-transparent white border, and a deep shadow (`box-shadow: 0 8px 32px 
+  rgba(0, 0, 0, 0.4)`) to separate foreground from the dynamic backgrounds.
+- Neon Borders (`.neon-border`): A custom utility that wraps cards. On hover, 
+  pseudo-elements expand a harsh gradient of primary (cyan) and secondary 
+  (purple) colors to create a high-voltage glowing rim.
+- Glowing Typography: Core text uses `text-glow`, blending physical drop-shadows 
+  with neon blurs, causing headings to literally radiate light depending on the 
+  color mode.
+
+--------------------------------------------------------------------------------
+4. SECTION-BY-SECTION DEEP DIVE (PRD & IMPLEMENTATION)
+--------------------------------------------------------------------------------
+
+A. THE HERO SECTION (`Hero.tsx`)
+- Logic: The highest impact zone. It relies on a `mix-blend-screen` aurora
+  background for dynamic lighting.
+- Typography: Names and hook lines use scrambled text effects (`split-type` and 
+  `text-scramble`) that resolve mechanically on load.
+- Buttons: Integrated a `MagneticButton` wrapper. When the mouse approaches,
+  the button physically pulls toward the cursor, creating an undeniable urge 
+  to click.
+- Tech Ticker: A seamlessly scrolling infinite marquee that cycles through 
+  brand icons, validating technical scope immediately.
+
+B. THE ABOUT SECTION (`About.tsx`)
+- Structure: A split layout focusing on humanizing the engineer while 
+  showcasing raw metadata.
+- Photo Frame: Wrapped in a `.neon-border` that throbs slightly.
+- Stats Counters: Implemented with intersection observers. `AnimatedCounter` 
+  rolls numbers upward dramatically as the user scrolls them into view for the 
+  first time.
+- Identity Chips: Small glass cards using hover-lift mechanics (`hover:-translate-y-1`)
+  with a targeted glowing shadow.
+
+C. THE PROJECTS GALLERY (`Projects.tsx`)
+- Core Behavior: The most complex GSAP setup. On desktop, the vertical scroll 
+  is hijacked / pinned. Continuing to scroll forces the section to scroll 
+  HORIZONTALLY automatically mapping viewport widths. On mobile, it gracefully 
+  degrades into vertical stacked cards.
+- Project Cards: Massive 16:10 image aspect ratios. The background of the screen 
+  dynamically shifts to a blurred `radial-gradient` that inherits the specific 
+  project's accent color (e.g., #FF4B4B for one project, #00E5FF for another).
+- Interaction: Hovering the image drops a stark, dark glass overlay with a magnetic 
+  view button, demanding high focal clarity.
+
+D. THE SKILLS / TECH STACK (`Skills.tsx`)
+- Aesthetic: Structured like a sci-fi HUD. The background features a `grid-dots-flow`
+  animation simulating a virtual floor mapping.
+- Cards: Built using the `neon-border` utility. Icons use native drop-shadows 
+  so the SVG vectors themselves emit light. Focus states scale the icons to 110%.
+- Tech Cloud: The lower portion renders dozens of individual skill pills powered
+  by Framer Motion spring physics with staggered delays. Hovering them strips the 
+  custom cursor, replacing it with a localized glow.
+
+E. THE EXPERIENCE TIMELINE (`Experience.tsx`)
+- Tracking Line: A central vertical gutter acts as the timeline spine. As the user
+  scrolls down the page, a GSAP `ScrollTrigger` dynamically increases the height 
+  of a bright cyan/purple gradient, tracking the scroll percentage precisely.
+- Cards: Deep glassmorphic rendering. We structured dynamic accent coloring into 
+  the arrays: Education components pulse Purple, while Work components pulse Cyan. 
+  The connecting nodes actively detect hovers to expand.
+
+F. THE CONTACT GATEWAY (`Contact.tsx`)
+- Lighting: The form is situated over two massive `animate-pulse-glow` orbs 
+  using `mix-blend-screen`. Over time, the environment breathes organically.
+- The Form: The `<input>` layers strip away standard borders, relying entirely on 
+  a bottom 2px white/10 border. Focused elements violently snap to the primary 
+  accent color, shifting user attention correctly.
+- Submit Button: Replaced a basic loading state with an "Initiate Sequence" 
+  logic. Hovering causes a solid gradient to rip across the button via a scale 
+  transform.
+
+--------------------------------------------------------------------------------
+5. RESPONSIVENESS AND CROSS-DEVICE LOGIC
+--------------------------------------------------------------------------------
+- Fluid Typography: Extensive use of CSS `clamp(min, preferred, max)` means 
+  fonts completely scale based on viewport width (`vw`) instead of requiring 
+  dozens of rigid tailwind breakpoints (`md:text-4xl lg:text-5xl`).
+- Structural Reductions: 
+  - The Hero grid collapses into a single column.
+  - GSAP Horizontal scrolls disable if `isMobile = true` (using a custom hook
+    mapping `max-width: 768px`).
+  - Mobile interactive elements have slightly larger hitboxes for finger accessibility.
+  - Touch interfaces bypass the custom Magnetic Cursors to prevent lag/stuck states.
+
+================================================================================
+END OF DOCUMENTATION
+================================================================================

@@ -78,7 +78,7 @@ function ProjectCard({
         </motion.div>
 
         {/* Info */}
-        <div className="space-y-6">
+        <div className="space-y-8">
           {/* Number */}
           <span
             className="font-display text-[8rem] md:text-[12rem] font-bold block leading-none select-none opacity-20 drop-shadow-2xl translate-y-8"
@@ -172,7 +172,7 @@ export default function Projects() {
     <section
       ref={sectionRef}
       id="projects"
-      className="relative overflow-hidden"
+      className="relative overflow-hidden z-20 bg-[#050505]"
     >
       {/* Desktop: Horizontal Scroll */}
       {!isMobile ? (

@@ -117,12 +117,12 @@ export default function Certifications() {
                     
                     {/* Overlay Badge */}
                     <div className="absolute bottom-6 left-6 right-6 flex items-center gap-4">
-                      <div className="w-14 h-14 rounded-full bg-accent-secondary text-white flex items-center justify-center shadow-[0_0_30px_rgba(139,92,246,0.6)]">
+                      <div className="w-14 h-14 shrink-0 rounded-full bg-accent-secondary text-white flex items-center justify-center shadow-[0_0_30px_rgba(139,92,246,0.6)]">
                          <Award size={28} />
                       </div>
-                      <div>
+                      <div className="flex-1 min-w-0">
                          <span className="font-mono text-[10px] text-bg-primary/70 uppercase tracking-widest block">Featured</span>
-                         <span className="font-display font-bold text-bg-primary text-lg leading-tight block">{featured.issuer}</span>
+                         <span className="font-display font-bold text-bg-primary text-lg leading-tight block truncate md:whitespace-normal break-words">{featured.issuer}</span>
                       </div>
                     </div>
                   </div>
@@ -208,16 +208,16 @@ export default function Certifications() {
 
                     {/* Top: Header Row */}
                     <div className="flex items-start justify-between mb-8 relative z-10">
-                        <div className="flex items-center gap-5">
-                          <div className="w-16 h-16 rounded-2xl bg-text-primary/5 border border-border-glass flex items-center justify-center shrink-0 shadow-inner group-hover:border-accent-primary/40 transition-colors backdrop-blur-md">
+                        <div className="flex items-center gap-5 flex-1 min-w-0 pr-4">
+                          <div className="w-16 h-16 shrink-0 rounded-2xl bg-text-primary/5 border border-border-glass flex items-center justify-center shadow-inner group-hover:border-accent-primary/40 transition-colors backdrop-blur-md">
                               <span className="text-3xl drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">{cert.badge}</span>
                           </div>
-                          <div>
-                              <h3 className="font-display font-extrabold text-2xl md:text-3xl text-text-primary group-hover:text-accent-primary transition-colors leading-tight">
+                          <div className="flex-1 min-w-0">
+                              <h3 className="font-display font-extrabold text-2xl md:text-3xl text-text-primary group-hover:text-accent-primary transition-colors leading-tight truncate md:whitespace-normal break-words">
                                 {cert.title}
                               </h3>
                               <div className="font-mono text-sm text-text-muted mt-2 flex items-center gap-2 font-semibold">
-                                  <Building2 size={14} className="text-accent-primary/60" /> {cert.issuer}
+                                  <Building2 size={14} className="text-accent-primary/60 shrink-0" /> <span className="truncate">{cert.issuer}</span>
                               </div>
                           </div>
                         </div>

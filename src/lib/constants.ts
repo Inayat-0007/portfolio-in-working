@@ -114,7 +114,7 @@ export const PROJECTS = [
     id: 1,
     number: "01",
     title: "SHL Assessment Recommender",
-    tags: ["FastAPI", "Gemini 2.0 Flash", "Sentence-Transformers", "Securty"],
+    tags: ["FastAPI", "Gemini 2.0 Flash", "Sentence-Transformers", "Security"],
     description:
       "Developed a semantic recommendation engine utilizing all-MiniLM-L6-v2 and Gemini 2.0 Flash for query expansion. Integrated production-grade security including slowapi for rate limiting and bleach for XSS sanitization.",
     image: "/images/project-shl.webp",
