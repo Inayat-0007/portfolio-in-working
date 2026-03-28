@@ -77,7 +77,7 @@ export default function Hero() {
       {/* ─── HERO SECTION ─────────────────────────────────────────────────────── */}
       <section
         id="hero"
-        className="relative h-[100dvh] md:h-[250vh] w-full"
+        className="relative min-h-[100dvh] md:min-h-[250vh] w-full"
       >
         {/* ─── BACKGROUND ─────────────────────────────────────────────────── */}
         {mounted && (
@@ -91,8 +91,9 @@ export default function Hero() {
                 alt="Inayat Hussain 3D portrait"
                 fill
                 priority
-                sizes="100vw"
-                quality={85}
+                fetchPriority="high"
+                sizes="(max-width: 768px) 100vw, 50vw"
+                quality={70}
                 className="object-cover object-[center_20%]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-[#050505]/80" />
@@ -136,30 +137,22 @@ export default function Hero() {
             <h1 className="sr-only">Inayat Hussain</h1>
 
             {/* Job title — h2 for correct heading hierarchy */}
-            <motion.h2
-              className="font-body font-semibold text-white/90 tracking-wide leading-tight md:leading-normal"
+            <h2
+              className="font-body font-semibold text-white/90 tracking-wide leading-tight md:leading-normal min-h-[1.5em]"
               style={{ fontSize: "clamp(1.2rem, 3.5vw, 1.65rem)" }}
-              initial={{ opacity: 0, x: -20 }}
-              animate={showContent ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.7, delay: 0.3 }}
             >
-              {showContent && (
-                <TextScramble text="Software Engineer | Full Stack & GenAI Specialist" speed={20} play />
-              )}
-            </motion.h2>
+              <TextScramble text="Software Engineer | Full Stack & GenAI Specialist" speed={20} play />
+            </h2>
 
             {/* Tag line */}
-            <motion.div
+            <div
               className="backdrop-blur-md bg-[#050505]/60 md:bg-[#050505]/50 border-l-2 p-3 md:px-5 md:py-3 rounded-r-md mt-1 mb-2 md:mt-0 max-w-[90%]"
               style={{ borderLeftColor: "var(--accent-secondary, #b026ff)" }}
-              initial={{ opacity: 0, scale: 0.97 }}
-              animate={showContent ? { opacity: 1, scale: 1 } : {}}
-              transition={{ duration: 0.7, delay: 0.5 }}
             >
               <p className="font-mono text-[11px] md:text-sm tracking-widest text-white/70 leading-relaxed md:leading-normal">
                 Building Scalable Web Solutions &amp; Intelligent AI Systems
               </p>
-            </motion.div>
+            </div>
 
             {/* CTAs */}
             <motion.div

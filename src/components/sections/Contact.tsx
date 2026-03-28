@@ -75,7 +75,7 @@ export default function Contact() {
       className="relative py-32 md:py-40 min-h-screen flex flex-col justify-center overflow-hidden"
     >
       {/* Aurora Background Effect */}
-      <div className="absolute inset-0 z-0 opacity-40 pointer-events-none overflow-hidden mix-blend-screen">
+      <div className="absolute inset-0 z-0 opacity-40 pointer-events-none overflow-hidden mix-blend-screen" aria-hidden="true">
         <div className="absolute top-[20%] left-[10%] w-[40vw] h-[40vw] rounded-full bg-accent-primary/20 blur-[150px] animate-pulse-glow" />
         <div className="absolute bottom-[10%] right-[10%] w-[30vw] h-[30vw] rounded-full bg-accent-secondary/20 blur-[120px] animate-pulse-glow" />
       </div>

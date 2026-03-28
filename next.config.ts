@@ -1,5 +1,9 @@
 import type { NextConfig } from "next";
 
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
@@ -13,13 +17,40 @@ const nextConfig: NextConfig = {
   compress: true,
   // Enable strict mode for React 19 
   reactStrictMode: true,
+  productionBrowserSourceMaps: true,
   experimental: {
     // Partial pre-rendering for faster initial loads
     optimizeCss: true,
+    optimizePackageImports: ["lucide-react", "framer-motion"],
   },
   // Aggressive HTTP caching headers for static assets
   async headers() {
     return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none';"
+          },
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin"
+          },
+          {
+            key: "X-Frame-Options",
+            value: "DENY"
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff"
+          },
+          {
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin"
+          },
+        ],
+      },
       {
         source: "/images/:path*",
         headers: [
@@ -33,4 +64,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

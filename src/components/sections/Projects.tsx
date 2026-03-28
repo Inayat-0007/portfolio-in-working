@@ -48,8 +48,8 @@ function ProjectCard({
               src={project.image}
               alt={project.title}
               fill
-              priority
-              sizes="(max-width: 768px) 100vw, 60vw"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              quality={70}
               className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div
@@ -70,6 +70,7 @@ function ProjectCard({
                 className="font-mono text-sm uppercase tracking-[0.2em] flex items-center gap-3 px-8 py-4 border border-white/20 rounded-full hover:bg-white/10 hover:border-white/40 transition-all"
                 style={{ color: project.color, textShadow: `0 0 10px ${project.color}` }}
                 data-cursor="button"
+                aria-label={`View ${project.title} project`}
               >
                 View Project <ExternalLink size={16} />
               </a>
@@ -124,6 +125,7 @@ function ProjectCard({
                   className="inline-flex items-center gap-2 font-mono text-sm uppercase tracking-wider group/link text-text-primary"
                   data-cursor="link"
                   data-cursor-label="OPEN"
+                  aria-label={`View ${project.title} source code on GitHub`}
                 >
                   GitHub
                   <span className="w-0 group-hover/link:w-8 h-[1px] transition-all duration-500" style={{ backgroundColor: project.color }} />
@@ -244,6 +246,7 @@ export default function Projects() {
                       alt={project.title}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      quality={70}
                       className="object-cover"
                     />
                     <div
@@ -282,6 +285,7 @@ export default function Projects() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider px-4 py-2.5 rounded-lg border transition-colors"
                     style={{ color: project.color, borderColor: `${project.color}40`, backgroundColor: `${project.color}10` }}
+                    aria-label={`View ${project.title} project`}
                   >
                     View Project <ExternalLink size={14} />
                   </a>

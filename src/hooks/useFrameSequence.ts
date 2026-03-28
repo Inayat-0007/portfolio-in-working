@@ -21,7 +21,12 @@ export function useFrameSequence(
     let initialUnlocked = false;
 
     const updateImages = () => {
-      setImages(loadedImages.filter(Boolean) as HTMLImageElement[]);
+      if (cancelled) return;
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => setImages(loadedImages.filter(Boolean) as HTMLImageElement[]));
+      } else {
+        setTimeout(() => setImages(loadedImages.filter(Boolean) as HTMLImageElement[]), 0);
+      }
     };
 
     const onFrameLoad = (img: HTMLImageElement, idx: number) => {
@@ -55,7 +60,7 @@ export function useFrameSequence(
         const img = new window.Image();
         const frameNum = String(i + 1).padStart(padLength, "0");
         img.decoding = "async"; // Don't block main thread during decode
-        img.src = `${pathPrefix}${frameNum}.jpg`;
+        img.src = `${pathPrefix}${frameNum}.webp`;
 
         const done = () => {
           activeCount--;

@@ -69,15 +69,14 @@ export default function RootLayout({
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
         {/* Non-render-blocking Devicon load */}
         <link
-          rel="stylesheet"
-          type="text/css"
+          rel="preload"
           href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
-          media="print"
+          as="style"
           // @ts-expect-error – onLoad trick for async CSS
-          onLoad="this.media='all'"
+          onLoad="this.onload=null;this.rel='stylesheet'"
         />
         <noscript>
-          <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
         </noscript>
         {/* CSS var for navbar height used by sticky canvas */}
         <style>{`:root { --navbar-h: 4rem; } @media (min-width: 768px) { :root { --navbar-h: 5rem; } }`}</style>
