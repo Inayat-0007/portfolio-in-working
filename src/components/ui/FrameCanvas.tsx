@@ -29,11 +29,21 @@ export default function FrameCanvas({ images }: { images: HTMLImageElement[] }) 
     if (!ctx) return;
 
     let animationFrameId: number;
+    let isVisible = true;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+      },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
 
     const render = () => {
-      // LERP logic for buttery smooth transitions
-      // 0.1 is the easing factor. Lower = smoother/slower, Higher = snappier
-      currentFrame.current += (frameIndex.current - currentFrame.current) * 0.15;
+      // Only consume CPU/GPU cycles when actually visible
+      if (isVisible) {
+        // LERP logic for buttery smooth transitions
+        currentFrame.current += (frameIndex.current - currentFrame.current) * 0.15;
       
       const index = Math.min(
         images.length - 1,
@@ -60,6 +70,7 @@ export default function FrameCanvas({ images }: { images: HTMLImageElement[] }) 
         }
 
         ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+        }
       }
       
       animationFrameId = requestAnimationFrame(render);
@@ -82,6 +93,7 @@ export default function FrameCanvas({ images }: { images: HTMLImageElement[] }) 
     return () => {
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
     };
   }, [images]);
 

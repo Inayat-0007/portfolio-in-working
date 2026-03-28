@@ -83,7 +83,8 @@ export default function Hero() {
                 src="/images/hero section images frame/ezgif-frame-210.jpg"
                 alt="Inayat Hero"
                 fill
-                className="object-cover opacity-60"
+                className="object-contain md:object-cover"
+                sizes="100vw"
                 priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-[#050505]/80" />
@@ -124,7 +125,7 @@ export default function Hero() {
                 )}
               </motion.h1>
 
-              <motion.p
+              <motion.h2
                 className="font-body font-medium text-text-primary mb-8 text-shadow-sm opacity-90 tracking-wide"
                 style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.6rem)" }}
                 initial={{ opacity: 0, x: -20 }}
@@ -132,7 +133,7 @@ export default function Hero() {
                 transition={{ duration: 0.8, delay: 0.8 }}
               >
                 Software Engineer | Full Stack & GenAI Specialist
-              </motion.p>
+              </motion.h2>
 
               <motion.div
                 className="glass-card mb-16 px-6 py-4 border-l-2 text-text-muted bg-[#050505]/40 backdrop-blur-md"
