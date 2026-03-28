@@ -72,10 +72,10 @@ Want to look under the hood? It literally takes seconds.
 
 ```bash
 # 1. Clone the bleeding edge repository
-git clone https://github.com/INAYAT-AI-ML-LLM/PORTFOLIO-INAYAT-HUSSAIN-2026-AI-ML-LLM.git
+git clone https://github.com/Inayat-0007/MohammadInayatHussain-Portfolio-2026.git
 
 # 2. Enter the matrix
-cd PORTFOLIO-INAYAT-HUSSAIN-2026-AI-ML-LLM
+cd MohammadInayatHussain-Portfolio-2026
 
 # 3. Install packages (Node 18+ required)
 npm install
