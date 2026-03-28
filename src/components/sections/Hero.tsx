@@ -105,10 +105,15 @@ export default function Hero() {
         )}
 
         {/* ─── TEXT OVERLAY ────────────────────────────────────────────────── */}
-        {/*  Positioned relative to viewport bottom so it's always readable    */}
+        {/*  Sticky so it travels with the canvas and disappears at section end */}
         <div
-          className="fixed left-0 w-full z-10 pointer-events-none px-6 md:px-12"
-          style={{ bottom: "12vh" }}
+          className="sticky left-0 w-full z-10 pointer-events-none px-6 md:px-12 flex flex-col justify-end"
+          style={{
+            top: "var(--navbar-h, 4rem)",
+            height: "calc(100dvh - var(--navbar-h, 4rem))",
+            marginTop: "calc(-100dvh + var(--navbar-h, 4rem))", // pull up to overlap the canvas
+            paddingBottom: "10vh",
+          }}
           aria-live="polite"
         >
           <div className="w-full max-w-4xl mx-auto flex flex-col items-start gap-4 pointer-events-auto">
